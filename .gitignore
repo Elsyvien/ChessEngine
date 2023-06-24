@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+.vs/ChessEngine/v17/.suo
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.ipch
+*.log
+*.lastbuildstate
+*.tlog
+*.idb
+*.pdb
