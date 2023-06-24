@@ -5,7 +5,7 @@ Piece board[BOARD_SIZE][BOARD_SIZE];
 
 void initializeBoard() {
     //Figuren auf Startpositionen Setzen
-    //Weiﬂe Figuren
+    //Wei√üe Figuren
     board[0][0] = { ROOK, WHITE };
     board[0][1] = { KNIGHT, WHITE };
     board[0][2] = { BISHOP, WHITE };
