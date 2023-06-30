@@ -2,6 +2,8 @@
 
 const int BOARD_SIZE = 8;
 Piece board[BOARD_SIZE][BOARD_SIZE];
+int whiteCapturedCount = 0;
+int blackCapturedCount = 0;
 
 void initializeBoard() {
     //Figuren auf Startpositionen Setzen
@@ -33,5 +35,28 @@ void initializeBoard() {
     for (int i = 2; i < 6; ++i) 
         for (int j = 0; j < BOARD_SIZE; ++j) 
             board[i][j] = { EMPTY, WHITE };
- 
+
+}
+
+void makeMove(const Move& move) {
+    //Ausgangs und Ziel Felder abrufen der Bewegung
+
+    int srcRow = move.source.row;
+    int srcCol = move.source.column;
+    int dstRow = move.destination.column;
+    int dstColumn = move.destination.column;
+
+    Piece piece = board[srcRow][srcCol];
+    board[srcRow][srcCol] = {EMPTY, WHITE};
+    
+    Piece capturedPiece = board[destRow][destCol];
+    if(capturedPiece.type != EMPTY) {
+
+    }
+    
+    
+    board[destRow][destCol] = piece;
+
+
+
 }
