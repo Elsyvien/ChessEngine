@@ -48,6 +48,38 @@ void initializeBoard() {
 
 }
 
+bool isValidMove(const Move& move) {
+    int srcRow = move.source.row;
+    int srcCol = move.source.column;
+    int destRow = move.destination.column;
+    int destCol = move.destination.column;
+
+    Piece piece = board[srcRow][srcCol];
+
+    if (destRow < 0 || destRow >= BOARD_SIZE || destCol < 0 || destCol >= BOARD_SIZE) 
+        return false;
+
+    if (board[destRow][destCol].color == piece.color) 
+        return false;
+    
+    int rowOffset = destRow - srcRow;
+    int colOffset = destCol - srcCol;
+
+    switch (piece.type) {
+    case PAWN: {
+        int forwardDirection = (piece.color == WHITE) ? -1 : 1;
+        if (colOffset == 0) {
+            if (board[destRow][destCol].type == EMPTY)
+                return true;
+        } else if (rowOffset == 2 * forwardDirection && srcRow == (piece.color == WHITE ? 6 : 1)) {
+            if (board[destRow][destCol].type == EMPTY && board[srcRow + forwardDirection][srcCol].type == EMPTY) {
+                    return true;
+                }
+            }
+
+    }
+}
+
 void removePiece(int row, int col) {
     board[row][col] = {EMPTY, EMPTY};
 }
@@ -74,8 +106,8 @@ void makeMove(const Move& move) {
 
     int srcRow = move.source.row;
     int srcCol = move.source.column;
-    int dstRow = move.destination.column;
-    int dstColumn = move.destination.column;
+    int destRow = move.destination.column;
+    int destCol = move.destination.column;
 
     Piece piece = board[srcRow][srcCol];
     board[srcRow][srcCol] = {EMPTY, EMPTY};
@@ -125,8 +157,6 @@ void makeMove(const Move& move) {
             }
         }
     
-    board[destRow][destCol] = piece;
-
-
-
+        board[destRow][destCol] = piece;
+    }
 }
