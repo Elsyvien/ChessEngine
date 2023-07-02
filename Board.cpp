@@ -1,4 +1,7 @@
+#include <iostream>
 #include "board.h"
+
+using namespace std;
 
 const int BOARD_SIZE = 8;
 Piece board[BOARD_SIZE][BOARD_SIZE];
@@ -56,12 +59,12 @@ bool isValidMove(const Move& move) {
 
     Piece piece = board[srcRow][srcCol];
 
-    if (destRow < 0 || destRow >= BOARD_SIZE || destCol < 0 || destCol >= BOARD_SIZE) 
+    if (destRow < 0 || destRow >= BOARD_SIZE || destCol < 0 || destCol >= BOARD_SIZE)
         return false;
 
-    if (board[destRow][destCol].color == piece.color) 
+    if (board[destRow][destCol].color == piece.color)
         return false;
-    
+
     int rowOffset = destRow - srcRow;
     int colOffset = destCol - srcCol;
 
@@ -71,15 +74,49 @@ bool isValidMove(const Move& move) {
         if (colOffset == 0) {
             if (board[destRow][destCol].type == EMPTY)
                 return true;
-        } else if (rowOffset == 2 * forwardDirection && srcRow == (piece.color == WHITE ? 6 : 1)) {
-            if (board[destRow][destCol].type == EMPTY && board[srcRow + forwardDirection][srcCol].type == EMPTY) {
-                    return true;
-                }
-            }
+        }
+        else if (rowOffset == 2 * forwardDirection && srcRow == (piece.color == WHITE ? 6 : 1)) {
+            if (board[destRow][destCol].type == EMPTY && board[srcRow + forwardDirection][srcCol].type == EMPTY)
+                return true;
+        }
+        else if (std::abs(colOffset) == 1 && rowOffset == forwardDirection) {
+            if (board[destRow][destCol].type != EMPTY)
+                return true;
+        }
+        break;
+    }
+    case ROOK: {
+        if (rowOffset != 0 && colOffset != 0)
+            return false;
 
+        int rowStep = (rowOffset != 0) ? rowOffset / std::abs(rowOffset) : 0;
+        int colStep = (colOffset != 0) ? colOffset / std::abs(colOffset) : 0;
+        int row = srcRow + rowStep;
+        int col = srcCol + colStep;
+        while (row != destRow || col != destCol) {
+            if (board[row][col].type != EMPTY)
+                return false;
+
+            row += rowStep;
+            col += colStep;
+        }
+        return true;
+    }
+    case KNIGHT: {
+        if ((std::abs(rowOffset)) == 2 && std::abs(colOffset) == 1 || (std::abs(rowOffset) == 1 && std::abs(colOffset) == 2))
+            return true;
+    }
+    case BISHOP: {
+        if (std::abs(rowOffset) != std::abs(colOffset)) {
+            return false;
+        }
+        int rowStep = (rowOffset > 0) ? 1 : -1;
+        int colStep = (colOffset > 0) ? 1 : -1;
+        int row = srcRow + rowStep;
+        int col = srcCol + colStep;
+    }
     }
 }
-
 void removePiece(int row, int col) {
     board[row][col] = {EMPTY, EMPTY};
 }

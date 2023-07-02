@@ -18,6 +18,7 @@ extern int blackCapturedCount;
 extern const int PAWN_VALUE, ROOK_VALUE, KNIGHT_VALUE, BISHOP_VALUE, QUEEN_VALUE, KING_VALUE;
 
 void initializeBoard();
+bool isValidMove(const Move& move);
 void makeMove(const Move& move);
 void removePiece(int row, int col);
 int getPieceValue(PieceType type);
