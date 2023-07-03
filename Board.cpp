@@ -185,7 +185,7 @@ void movePiece(int srcRow, int srcCol, int destRow, int destColumn) {
 }
 
 void makeMove(const Move& move) {
-     int srcRow = move.source.row;
+    int srcRow = move.source.row;
     int srcCol = move.source.column;
     int destRow = move.destination.row;
     int destCol = move.destination.column;
