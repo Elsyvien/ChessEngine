@@ -9,6 +9,16 @@ struct Piece {
     PieceColor color;
 };
 
+struct Position {
+    int row;
+    int column;
+};
+
+struct Move {
+    Position source;
+    Position destination;
+};
+
 extern const int BOARD_SIZE;
 extern Piece board[BOARD_SIZE][BOARD_SIZE];
 
@@ -18,9 +28,14 @@ extern int blackCapturedCount;
 extern const int PAWN_VALUE, ROOK_VALUE, KNIGHT_VALUE, BISHOP_VALUE, QUEEN_VALUE, KING_VALUE;
 
 void initializeBoard();
+void printBoard();
 bool isValidMove(const Move& move);
 void makeMove(const Move& move);
-void removePiece(int row, int col);
-int getPieceValue(PieceType type);
+void movePiece(int srcRow, int srcCol, int destRow, int destCol);
+void capturePiece(int row, int col);
+bool isCastleMove(const Move& move);
+void moveRookForCastle(const Move& move);
+bool isEnPassantCapture(const Move& move);
+void performEnPassantCapture(const Move& move);
 
 #endif 

@@ -114,9 +114,42 @@ bool isValidMove(const Move& move) {
         int colStep = (colOffset > 0) ? 1 : -1;
         int row = srcRow + rowStep;
         int col = srcCol + colStep;
+        while (row != destRow && col != destCol) {
+            if (board[row][col].type != EMPTY)
+                return false;
+        row += rowStep;
+        col += colStep;
+        }
+        return true;
     }
+    case QUEEN: {
+        if (rowOffset == 0 || colOffset == 0 || std::abs(rowOffset) == std::abs(colOffset)) {
+            int rowStep = (rowOffset != 0) ? rowOffset / std::abs(rowOffset) : 0;
+            int colStep = (colOffset != 0) ? colOffset / std::abs(colOffset) : 0;
+            int row = srcRow + rowStep;
+            int col = srcRow + rowStep;
+            while (row != destRow || col != destCol) {
+                if (board[row][col].type != EMPTY) 
+                    return false;
+            row += rowStep;
+            col += colStep;
+            }
+            return true;
+        } 
+        break;
     }
+    case KING: {
+        if (std::abs(rowOffset) <= 1 && std::abs(colOffset) <= 1) 
+            return true; 
+        
+        break;
+    }
+    default:
+        return false;
+    }
+    return false;
 }
+
 void removePiece(int row, int col) {
     board[row][col] = {EMPTY, EMPTY};
 }
@@ -138,62 +171,36 @@ int getPieceValue(PieceType type) {
     }
 }
 
-void makeMove(const Move& move) {
-    //Ausgangs und Ziel Felder abrufen der Bewegung
+void movePiece(int srcRow, int srcCol, int destRow, int destColumn) {
+    Move move;
+    move.source.row = srcRow;
+    move.source.column = srcCol;
+    move.destination.row = destRow;
+    move.destination.column = destColumn;
 
-    int srcRow = move.source.row;
+    if(isValidMove(move)) {
+        board[destRow][destColumn] = board[srcRow][srcCol];
+        board[destRow][destColumn] = board[srcRow][srcCol];
+    }
+}
+
+void makeMove(const Move& move) {
+     int srcRow = move.source.row;
     int srcCol = move.source.column;
-    int destRow = move.destination.column;
+    int destRow = move.destination.row;
     int destCol = move.destination.column;
 
-    Piece piece = board[srcRow][srcCol];
-    board[srcRow][srcCol] = {EMPTY, EMPTY};
-    
-    Piece capturedPiece = board[destRow][destCol];
-    if(capturedPiece.type != EMPTY) {
-        if (capturedPiece.color == WHITE) {
-            whiteCapturedCount += getPieceValue(capturedPiece.type);
-        } else {
-                blackCapturedCount += getPieceValue(capturedPiece.type);
-        }
-        
-        removePiece(destRow, destCol);   
-    }      
-    
-    if (piece.type == PAWN) {
-        // Check for en passant
-        if (/* Condition to check en passant */) {
-            // Handle en passant
-            // Remove the captured pawn from the board
-            int captureRow = /* Calculate the row of the captured pawn */;
-            int captureCol = destCol; // The captured pawn is on the same column as the destination square
-            removePiece(captureRow, captureCol);
-        }
-    } else if (piece.type == KING) {
-        // Check for castling
-        if (/* Condition to check castling */) {
-            // Handle castling
-            if (destCol > srcCol) {
-                // Perform kingside castling
-                int rookSrcCol = BOARD_SIZE - 1; // Column of the rook on the kingside
-                int rookDestCol = destCol - 1; // Column of the rook's destination square
-                Piece rook = board[destRow][rookSrcCol];
-                // Update the source square of the rook to be empty
-                board[destRow][rookSrcCol] = {EMPTY, EMPTY};
-                // Update the destination square of the rook with the rook piece
-                board[destRow][rookDestCol] = rook;
-            } else {
-                // Perform queenside castling
-                int rookSrcCol = 0; // Column of the rook on the queenside
-                int rookDestCol = destCol + 1; // Column of the rook's destination square
-                Piece rook = board[destRow][rookSrcCol];
-                // Update the source square of the rook to be empty
-                board[destRow][rookSrcCol] = {EMPTY, EMPTY};
-                // Update the destination square of the rook with the rook piece
-                board[destRow][rookDestCol] = rook;
-            }
-        }
-    
-        board[destRow][destCol] = piece;
+    movePiece(srcRow, srcCol, destRow, destCol);
+
+    if (board[destRow][destCol].type != EMPTY) {
+        capturePiece(destRow, destCol);
+    }
+
+    if (isCastleMove(move)) {
+        moveRookForCastle(move);
+    }
+
+    if (isEnPassantCapture(move)) {
+        performEnPassantCapture(move);
     }
 }
