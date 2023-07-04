@@ -184,6 +184,19 @@ void movePiece(int srcRow, int srcCol, int destRow, int destColumn) {
     }
 }
 
+bool isCastleMove(const Move& move) {
+
+
+
+}
+
+
+bool isEnPassantCapture(const Move& move) {
+
+
+
+}
+
 void makeMove(const Move& move) {
     int srcRow = move.source.row;
     int srcCol = move.source.column;
