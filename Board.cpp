@@ -6,6 +6,8 @@ using namespace std;
 const int BOARD_SIZE = 8;
 Piece board[BOARD_SIZE][BOARD_SIZE];
 
+int moveNumber = 0;
+
 int whiteCapturedCount = 0;
 int blackCapturedCount = 0;
 
@@ -15,6 +17,10 @@ const int KNIGHT_VALUE = 3;
 const int BISHOP_VALUE = 3;
 const int QUEEN_VALUE = 9;
 const int KING_VALUE = 0;
+bool BRook1MovedValue = false;
+bool BRook2MovedValue = false;
+bool WRook1MovedValue = false;
+bool WRook2MovedValue = false;
 
 
 
@@ -205,15 +211,17 @@ void makeMove(const Move& move) {
 
     movePiece(srcRow, srcCol, destRow, destCol);
 
-    if (board[destRow][destCol].type != EMPTY) {
+    if (board[destRow][destCol].type != EMPTY) 
         capturePiece(destRow, destCol);
-    }
+    
 
-    if (isCastleMove(move)) {
+    if (isCastleMove(move)) 
         moveRookForCastle(move);
-    }
+    
 
-    if (isEnPassantCapture(move)) {
+    if (isEnPassantCapture(move)) 
         performEnPassantCapture(move);
-    }
+    
+
+    moveNumber++;
 }

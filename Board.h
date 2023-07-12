@@ -25,6 +25,7 @@ extern Piece board[BOARD_SIZE][BOARD_SIZE];
 extern int whiteCapturedCount;
 extern int blackCapturedCount;
 extern bool BRook1Moved, BRook2Moved, WRook1Moved, WRook2Moved;
+extern int moveNumber;
 
 extern const int PAWN_VALUE, ROOK_VALUE, KNIGHT_VALUE, BISHOP_VALUE, QUEEN_VALUE, KING_VALUE;
 
